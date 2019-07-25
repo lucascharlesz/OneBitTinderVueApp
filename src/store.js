@@ -1,16 +1,16 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-
-Vue.use(Vuex)
-
+import Vue from 'vue';
+import Vuex from 'vuex';
+import Account from './stores/account';
+import Notification from './stores/notification';
+import Match from './stores/match';
+ 
+Vue.use(Vuex);
+ 
 export default new Vuex.Store({
-  state: {
-
-  },
-  mutations: {
-
-  },
-  actions: {
-
+  modules: {
+    Account,
+    Notification,
+    Match
   }
-})
+});
+

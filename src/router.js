@@ -1,23 +1,68 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Home from './views/Home.vue'
+import Vue from 'vue';
+import Router from 'vue-router';
+import store from './store';
+import Home from './views/Home.vue';
+import Login from './views/Login.vue';
+import SignUp from './views/SignUp.vue';
+import ChatList from './views/ChatList.vue';
+import UserShow from './views/UserShow.vue';
 
-Vue.use(Router)
+Vue.use(Router);
 
-export default new Router({
+const router = new Router({
+  mode: 'history',
   routes: [
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
+    {
+      path: '/sign-up',
+      name: 'sign-up',
+      component: SignUp
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      props: true,
+      component: UserShow
+    },
+    {
+      path: '/user',
+      name: 'user',
+      props: true,
+      component: UserShow
+    },    
+    {
+      path: '/chats',
+      name: 'chats',
+      component: ChatList
     }
-  ]
-})
+  ],
+});
+
+
+router.beforeEach((to, from, next) => {
+  const publicPages = ['/login', '/sign-up'];
+  const authRequired = !publicPages.includes(to.path);
+
+  store.dispatch("loadLocalAccount");
+  let loggedIn = store.getters['isLoggedIn'];
+
+  if(authRequired && !loggedIn) {
+    return next({
+      path: '/login',
+      query: { returnUrl: to.path }
+    });
+  }
+
+  next();
+});
+
+export default router;
