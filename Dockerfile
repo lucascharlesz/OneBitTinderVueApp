@@ -7,10 +7,9 @@ ENV SERVER_PATH /OneBitTinderVueApp
 
 WORKDIR /app
 
+COPY . .
 COPY package.json yarn*.lock ./
 RUN yarn config set no-progress && yarn install
-
-COPY . .
 
 RUN NODE_ENV=production yarn build
 

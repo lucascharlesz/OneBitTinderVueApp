@@ -1,4 +1,5 @@
 import AccountService from '../services/account_service';
+import store from '../store';
 
 export default {
   state: {
@@ -12,9 +13,17 @@ export default {
 
   mutations: {
     performLogin(state, { email, password }) {
-      AccountService.login(email, password).then(user => {
-        state.account = user;
-        localStorage.setItem('account', JSON.stringify(user));
+      AccountService.login(email, password).then((res) => {
+        if (res.data) {
+          state.account = res.data;
+          localStorage.setItem('account', JSON.stringify(res.data));
+          store.dispatch('Notification/alert', { type: 'success', message: 'Successfuly logged in.' })
+        }
+      }, (error) => {
+        if(error.response) {
+          this.errors = error.response.data.error;
+          store.dispatch('Notification/alert', { type: 'danger', message: this.errors })
+        }
       })
     },
 
@@ -66,9 +75,8 @@ export default {
 
   getters: {
     isLoggedIn(state) {
-      return state.account != ""
+      return state.account != "";
     },
-
 
     accountHeaders(state) {
       return { 'X-User-Email': state.account.email, 'X-User-Token': state.account.authentication_token }
