@@ -46,6 +46,7 @@
             "{{ currentUser.description }}"
           </h5>
         </div>
+        <Logout/>
       </div>
     </div>
   </div>
@@ -92,11 +93,13 @@
   import { mapState } from 'vuex';
   import router from '../router';
   import UserService from '../services/user_service';
+  import Logout from "../components/Logout";
 
   export default {
     components: {
       swiper,
-      swiperSlide
+      swiperSlide,
+      Logout
     },
 
     props: ['user'],

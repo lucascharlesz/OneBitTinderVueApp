@@ -4,7 +4,7 @@ import store from '../store';
 export default {
   async login(email, password) {
     let response = await axios.post("users/sign_in", { user: { email: email, password: password } })
-    return response
+    return response.data;
   },
 
   async signUp(name, email, password, passwordConfirmation) {

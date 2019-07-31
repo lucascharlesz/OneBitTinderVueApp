@@ -1,5 +1,6 @@
 import AccountService from '../services/account_service';
 import store from '../store';
+import router from '../router';
 
 export default {
   state: {
@@ -14,17 +15,22 @@ export default {
   mutations: {
     performLogin(state, { email, password }) {
       AccountService.login(email, password).then((res) => {
-        if (res.data) {
-          state.account = res.data;
-          localStorage.setItem('account', JSON.stringify(res.data));
+          state.account = res;
+          localStorage.setItem('account', JSON.stringify(res));
           store.dispatch('Notification/alert', { type: 'success', message: 'Successfuly logged in.' })
-        }
       }, (error) => {
         if(error.response) {
           this.errors = error.response.data.error;
           store.dispatch('Notification/alert', { type: 'danger', message: this.errors })
         }
       })
+    },
+
+    performLogout(state) {
+      state.account = "";
+      localStorage.setItem('account', JSON.stringify(""));
+      store.dispatch('Notification/alert', { type: 'info', message: 'You are currently logged out.' })
+      router.push('/login')
     },
 
     loadLocalStorageAccount(state) {
@@ -58,6 +64,10 @@ export default {
   actions: {
     login(context, { email, password }) {
       context.commit("performLogin", { email, password })
+    },
+
+    logout(context) {
+      context.commit("performLogout")
     },
 
     loadLocalAccount(context) {
