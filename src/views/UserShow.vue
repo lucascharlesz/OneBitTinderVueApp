@@ -1,11 +1,17 @@
 <template>
   <div>
     <div>
-      <swiper>
-        <swiperSlide v-for="photo in currentUser.photos" :key="photo.url">
-          <img :src="photo.url" >
-        </swiperSlide>
-      </swiper>
+      <div v-if="currentUser.photos && currentUser.photos.length > 0">
+        <swiper>
+          <swiperSlide v-for="photo in currentUser.photos" :key="photo.url">
+            <img :src="photo.url" >
+          </swiperSlide>
+        </swiper>
+      </div>
+
+      <div v-else>
+        <img src="@/assets/doge.jpg" @click="openMenu(photo)" />
+      </div>
 
       <div class="columns is-mobile is-gapless is-centered action-buttons" v-if="isLoggedUser">
         <div class="column is-12">

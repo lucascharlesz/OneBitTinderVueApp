@@ -6,6 +6,8 @@
         <div class="card">
           <div class="card-content">
             <form @submit.prevent="signUp(name, email, password, passwordConfirmation )">
+              <UserPhoto/>
+
               <b-field label="Nome">
                 <b-input v-model="name" type="text"></b-input>
               </b-field>
@@ -46,10 +48,16 @@
 <script>
 
 import AccountService from '../services/account_service';
+import PhotoService from '../services/photo_service';
 import router from '../router';
 import store from '../store';
+import UserPhoto from '../components/UserPhoto';
 
 export default {
+  components: {
+    UserPhoto
+  },
+
   data() {
     return {
       name: "",
@@ -66,8 +74,10 @@ export default {
 
   methods: {
     signUp(name, email, password, passwordConfirmation) {
-      AccountService.signUp(name, email, password, passwordConfirmation).then(() => {
-        router.push("/login");
+      AccountService.signUp(name, email, password, passwordConfirmation).then((res) => {
+        localStorage.setItem('account', JSON.stringify(res));
+        router.push("/");
+        PhotoService.add(localStorage.getItem('tmp_photo'));
         store.dispatch('Notification/alert', { type: 'success', message: "Cadastro realizado com sucesso" });
       }, (error) => {
         if(error.response) this.errors = error.response.data.errors;

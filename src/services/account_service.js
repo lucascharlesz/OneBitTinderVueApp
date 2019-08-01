@@ -10,7 +10,7 @@ export default {
   async signUp(name, email, password, passwordConfirmation) {
     let response = await axios.post("users", { user: { name: name, email: email, password: password,
                                                        password_confirmation: passwordConfirmation } })
-    return response;
+    return response.data;
   },
   async update(id, name, college, company, description) {
     let headers = store.getters['accountHeaders'];
