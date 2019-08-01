@@ -7,6 +7,7 @@
         icon-left="sign-out-alt">
         Sign out
       </b-button>
+    </div>
   </div>
 </template>
 
