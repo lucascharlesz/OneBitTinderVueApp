@@ -15,9 +15,9 @@ export default {
   mutations: {
     performLogin(state, { email, password }) {
       AccountService.login(email, password).then((res) => {
-          state.account = res;
-          localStorage.setItem('account', JSON.stringify(res));
-          store.dispatch('Notification/alert', { type: 'success', message: 'Successfuly logged in.' })
+        state.account = res;
+        localStorage.setItem('account', JSON.stringify(res));
+        store.dispatch('Notification/alert', { type: 'success', message: 'Successfuly logged in.' })
       }, (error) => {
         if(error.response) {
           this.errors = error.response.data.error;

@@ -80,8 +80,11 @@
 <script>
 
   import { swiper, swiperSlide } from 'vue-awesome-swiper';
+  import { mapState, mapActions } from 'vuex';
   import MatchService from '../services/match_service';
   import ChatService from '../services/chat_service';
+  import router from '../router';
+  import store from '../store';
 
   export default {
     components: {
@@ -91,8 +94,6 @@
 
     data() {
       return {
-        chats: [],
-        matches: [],
         isMenuActive: false,
         currentItem: {},
         swiperOptions: {
@@ -102,6 +103,13 @@
           }
         }
       }
+    },
+
+    computed: {
+      ...mapState('Message', {
+        chats: state => state.chats,
+        matches: state => state.matches
+      })
     },
 
     mounted() {
@@ -121,16 +129,13 @@
       },
 
       loadMatches() {
-        MatchService.loadMyMatches().then(matches => {
-          this.matches = matches;
-        })
+        store.dispatch('Message/loadMatches')
       },
 
       loadChats() {
-        ChatService.load().then(chats => {
-          this.chats = chats;
-        })
+        store.dispatch('Message/getChats')
       },
+
       unmatch() {
         MatchService.unmatch(this.currentItem).then(() => {
           let type = this.currentItem.type
@@ -138,6 +143,10 @@
           this[type].splice(indexToRemove, 1);
           this.closeMenu();
         });
+      },
+      
+      startChat() {
+        router.push('/messages')
       }
     }
   }
