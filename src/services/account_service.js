@@ -1,5 +1,6 @@
 import axios from 'axios';
 import store from '../store';
+import PhotoService from '../services/photo_service';
 
 export default {
   async login(email, password) {
@@ -7,9 +8,15 @@ export default {
     return response.data;
   },
 
-  async signUp(name, email, password, passwordConfirmation) {
+  async signUp(name, email, password, passwordConfirmation, photoToUpload) {
     let response = await axios.post("users", { user: { name: name, email: email, password: password,
                                                        password_confirmation: passwordConfirmation } })
+
+    let options = { 'token': response.data.authentication_token, 'email': email }
+
+    if (photoToUpload)
+      PhotoService.add(photoToUpload, options);
+
     return response.data;
   },
   async update(id, name, college, company, description) {

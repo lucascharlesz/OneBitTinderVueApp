@@ -1,12 +1,22 @@
 <template>
-  <div>  
+  <div>
     <div class="columns is-centered is-mobile login-area">
       <div class="column is-5-desktop is-11-mobile">
         <h1 class="title has-text-centered">Cadastro</h1>
         <div class="card">
           <div class="card-content">
-            <form @submit.prevent="signUp(name, email, password, passwordConfirmation )">
-              <UserPhoto/>
+            <form @submit.prevent="signUp(name, email, password, passwordConfirmation, photoToUpload )">
+              <img v-if="photoPreviewURL" :src="photoPreviewURL"/>
+              <img v-else :src="default_picture" />
+
+              <b-field class="file is-centered">
+                <b-upload v-model="photoToUpload">
+                  <a class="button is-primary">
+                    <b-icon icon="camera" pack="fas" size="is-small"></b-icon>
+                    <span>Adicionar nova foto</span>
+                  </a>
+                </b-upload>
+              </b-field>
 
               <b-field label="Nome">
                 <b-input v-model="name" type="text"></b-input>
@@ -20,11 +30,11 @@
                 <b-input v-model="password" type="password"></b-input>
               </b-field>
 
-              <b-field label="Confirmação de Senha" :type="getTypeOf('passwordConfirmation')" 
+              <b-field label="Confirmação de Senha" :type="getTypeOf('passwordConfirmation')"
                                                     :message="getErrorMessageOf('passwordConfirmation')">
                 <b-input v-model="passwordConfirmation" type="password"></b-input>
               </b-field>
-              
+
               <input type="submit" class="button is-fullwidth is-success" value="Cadastrar">
             </form>
 
@@ -48,18 +58,16 @@
 <script>
 
 import AccountService from '../services/account_service';
-import PhotoService from '../services/photo_service';
 import router from '../router';
 import store from '../store';
-import UserPhoto from '../components/UserPhoto';
 
 export default {
-  components: {
-    UserPhoto
-  },
 
   data() {
     return {
+      photoToUpload: null,
+      photoPreviewURL: "",
+      default_picture: require('../assets/doge.jpg'),
       name: "",
       email: "",
       password: "",
@@ -72,12 +80,19 @@ export default {
     }
   },
 
+  watch: {
+    photoToUpload(newValue) {
+      if (newValue) {
+        this.photoPreviewURL = URL.createObjectURL(newValue)
+      }
+    }
+  },
+
   methods: {
-    signUp(name, email, password, passwordConfirmation) {
-      AccountService.signUp(name, email, password, passwordConfirmation).then((res) => {
+    signUp(name, email, password, passwordConfirmation, photoToUpload) {
+      AccountService.signUp(name, email, password, passwordConfirmation, photoToUpload).then((res) => {
         localStorage.setItem('account', JSON.stringify(res));
         router.push("/");
-        PhotoService.add(localStorage.getItem('tmp_photo'));
         store.dispatch('Notification/alert', { type: 'success', message: "Cadastro realizado com sucesso" });
       }, (error) => {
         if(error.response) this.errors = error.response.data.errors;

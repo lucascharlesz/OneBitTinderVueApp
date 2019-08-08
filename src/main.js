@@ -9,14 +9,14 @@ import 'buefy/dist/buefy.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import './registerServiceWorker';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faSignOutAlt, faCamera, faSadCry, faCommentDots, faBars } from '@fortawesome/free-solid-svg-icons'
+import { faSignOutAlt, faCamera, faSadCry, faCommentDots, faBars, faExclamationCircle } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import Vuecidity from 'vuecidity'
 import '../node_modules/vuecidity/dist/lib/vuecidity.min.css'
 
 
-library.add(faSignOutAlt, faCamera, faSadCry, faCommentDots, faBars)
+library.add(faSignOutAlt, faCamera, faSadCry, faCommentDots, faBars, faExclamationCircle)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

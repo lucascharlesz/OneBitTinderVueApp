@@ -7,10 +7,15 @@ export default {
     return response.data.photos;
   },
 
-  async add(file) {
+  async add(file, options = null) {
     let formData = new FormData();
     formData.append('photo[file]', file);
+
     let headers = store.getters['accountHeaders'];
+
+    if (options !== null)
+      headers = { 'X-User-Email': options.email, 'X-User-Token': options.token }
+
     headers['Content-Type'] = 'multipart/form-data';
     let response = await axios.post(`photos`, formData, { headers: headers })
     return response.data.photo;

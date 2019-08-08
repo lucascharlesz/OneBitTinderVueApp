@@ -11,7 +11,7 @@
         <div class="swiper-button-next" slot="button-next"></div>
       </swiper>
     </div>
-    
+
     <div v-else>
       <img :src="default_picture" @click="openMenu(photo)" />
     </div>
@@ -76,7 +76,7 @@ export default {
         }
       },
       default_picture: require('../assets/doge.jpg'),
-      currentUrl: window.location.pathname
+      currentUrl: window.location.pathname,
     }
   },
 
@@ -90,12 +90,9 @@ export default {
   watch: {
     photoToUpload(newValue) {
       if(newValue) {
-        localStorage.setItem('tmp_photo', newValue);
-        if (window.location.pathname != '/sign-up') {
-          PhotoService.add(newValue).then(photo => {
-            this.photos.push(photo);
-          });
-        }
+        PhotoService.add(newValue).then(photo => {
+          this.photos.push(photo);
+        });
       }
     }
   },
