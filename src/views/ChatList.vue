@@ -35,11 +35,11 @@
         <div class="card-content">
           <div class="content">
             <div v-if="currentItem.type == 'matches'">
-              <a @click="startChat()">Iniciar chat</a>
+              <a @click="startChat(currentItem.match_id)">Iniciar chat</a>
               <hr />
             </div>
             <div v-if="currentItem.type == 'chats'">
-              <a @click="startChat()">Ir para Chat</a>
+              <a @click="startChat(currentItem.match_id)">Ir para Chat</a>
               <hr />
             </div>
             <a @click="unmatch()">Desfazer Match</a>
@@ -145,8 +145,9 @@
         });
       },
       
-      startChat() {
+      startChat(match_id) {
         router.push('/messages')
+        store.dispatch('Message/setCurrentChat', { match_id: match_id })
       }
     }
   }

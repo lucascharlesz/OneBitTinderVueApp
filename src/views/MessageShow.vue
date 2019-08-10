@@ -40,7 +40,7 @@
     data() {
       return {
         width: "300",
-        height: "1000",
+        height: "300",
         chat: "",
 
         transcript: {
@@ -49,20 +49,35 @@
       }
     },
     computed: {
-
       ...mapState('Message', {
-        chats: state => state.chats
+        chats: state => state.chats,
+        currentChat: state => state.currentChat
       })
     },
 
+    watch: {
+      chats(newValue) {
+        console.log(newValue)
+        if (typeof(newValue) == "object")
+          this.transcript["items"].push(newValue[newValue.length - 1].messages[0])
+      }
+    },
+
     mounted() {
-      this.appendMessages();
+      this.initializeMessages();
     },
 
     methods: {
-      appendMessages() {
-        this.transcript["items"] = this.chats[0].messages;
-      }
+      initializeMessages() {
+        this.transcript["items"] = this.chats
+                                       .filter((message) => { return message.match_id === this.currentChat } )
+                                       .reduce((prevVal, item) => { return prevVal.concat(item.messages) }, []);                                  
+      },
+      submit() {
+        this.sendMessage({message: this.chat});
+        this.chat = ''
+      },
+      ...mapActions('Message', ['sendMessage'])
     }
   }
 </script>
