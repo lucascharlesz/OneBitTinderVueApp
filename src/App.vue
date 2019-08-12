@@ -29,7 +29,7 @@ export default {
 
     ChatChannel: {
       received(data) {
-        this.alert({ type: 'info', message: `Você recebeu uma mensage de ${data.messages.name}` })
+        this.alert({ type: 'info', message: `Você recebeu uma mensage de ${data.messages[0].name}` })
         this.pushMessage({ message: data })
       }
     }

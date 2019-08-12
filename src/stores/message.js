@@ -54,7 +54,7 @@ export default {
 
       ChatService.sendMessage(this.msg).then(data => {
         context.commit("pushMessage", data);
-      }).catch().then(() => {
+      }, (error) => {
         store.dispatch('Notification/alert', { type: 'danger', message: 'Falha ao enviar mensagem.' });
       });
     }
